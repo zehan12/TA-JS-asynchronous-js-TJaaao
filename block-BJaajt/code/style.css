@@ -4,3 +4,13 @@ img{
     border-radius: 50%;
 }
 
+.flex{
+    display: flex;
+}
+
+
+.round{
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+}
