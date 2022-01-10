@@ -1,6 +1,35 @@
-let body = document.querySelector("body")
+let body = document.querySelector("body");
+let container = document.querySelector(".flex");
+let btn = document.querySelectorAll("button");
+let root = document.querySelector(".main");
+const a = document.querySelectorAll("a");
 
-let user = fetch(`https://api.spaceflightnewsapi.net/v3/articles?_limit=30`).then(res=>res.json()).then(user => user.forEach((e)=>{
+const url = `https://api.spaceflightnewsapi.net/v3/articles?_limit=30`
+
+function fetchData(url){
+fetch(url).then(res=>res.json()).then(data => { display(data),array(data)}).then()
+}
+
+var outObject;
+function array(user){
+    outObject = user.reduce(function(a, e) {
+        // GROUP BY estimated key (estKey), well, may be a just plain key
+        // a -- Accumulator result object
+        // e -- sequentally checked Element, the Element that is tested just at this itaration
+    
+        // new grouping name may be calculated, but must be based on real value of real field
+        let estKey = (e.newsSite); 
+        (a[estKey] ? a[estKey] : (a[estKey] = null || [])).push(e);
+        return a;
+    }, {});
+    // console.log(outObject);
+    return outObject;
+}
+
+
+function display(user){
+    root.innerHTML = " ";
+user.forEach((e)=>{
     let img = document.createElement("img");
     img.classList.add("img")
     img.src = `${e.imageUrl}`
@@ -17,8 +46,29 @@ let user = fetch(`https://api.spaceflightnewsapi.net/v3/articles?_limit=30`).the
     let container = document.createElement("div");
     container.classList.add("flex")
     container.append(image_contain,para)
-    body.append(container)
-}))
+    root.append(container)
+})
+}
+
+
+
+
+
+a.forEach((an,i)=>{   
+    an.addEventListener('click',(event)=>{
+        console.log(outObject)
+    if ( event.target.innerText === "Arstechnica"){
+        display(outObject)
+    }
+})
+});
+
+
+fetchData(url);
+
+console.log("script is working!!")
+
+
 
 
 
