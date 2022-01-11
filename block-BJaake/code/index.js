@@ -4,7 +4,7 @@ let btn = document.querySelectorAll("button");
 let root = document.querySelector(".main");
 const a = document.querySelectorAll("a");
 
-const url = `https://api.spaceflightnewsapi.net/v3/articles?_limit=30`
+const url = `https://api.spaceflightnewsapi.net/v3/articles?_limit=70`
 
 function fetchData(url){
 fetch(url).then(res=>res.json()).then(data => { display(data),array(data)}).then()
@@ -16,14 +16,27 @@ function array(user){
         // GROUP BY estimated key (estKey), well, may be a just plain key
         // a -- Accumulator result object
         // e -- sequentally checked Element, the Element that is tested just at this itaration
-    
         // new grouping name may be calculated, but must be based on real value of real field
         let estKey = (e.newsSite); 
         (a[estKey] ? a[estKey] : (a[estKey] = null || [])).push(e);
         return a;
-    }, {});
+    }, []);
     // console.log(outObject);
-    return outObject;
+    return clickFunction(outObject);
+}
+
+function clickFunction(object){
+    Object.keys( outObject ).forEach(( value )=>{ 
+        console.log( outObject[value] ); 
+        a.forEach((an,i)=>{   
+            an.addEventListener('click',(event)=>{
+                if ( event.target.innerText === value ){
+                    console.log("good")
+                    display(outObject[value])
+                }
+        })
+    });
+})
 }
 
 
@@ -49,20 +62,6 @@ user.forEach((e)=>{
     root.append(container)
 })
 }
-
-
-
-
-
-a.forEach((an,i)=>{   
-    an.addEventListener('click',(event)=>{
-        console.log(outObject)
-    if ( event.target.innerText === "Arstechnica"){
-        display(outObject)
-    }
-})
-});
-
 
 fetchData(url);
 
