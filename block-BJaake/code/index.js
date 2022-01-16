@@ -1,48 +1,69 @@
-let body = document.querySelector("body");
-let container = document.querySelector(".flex");
-let btn = document.querySelectorAll("button");
+// let body = document.querySelector("body");
+// let container = document.querySelector(".flex");
+// let btn = document.querySelectorAll("button");
 let root = document.querySelector(".main");
 const a = document.querySelectorAll("a");
+let newsData = [];
+let news = document.querySelector("#news-cat");
+console.log(news)
+
+news.addEventListener('change',(event)=>{
+    displayFilterData(newsData);
+    console.log(event)
+})
 
 const url = `https://api.spaceflightnewsapi.net/v3/articles?_limit=70`
 
 function fetchData(url){
-fetch(url).then(res=>res.json()).then(data => { display(data),array(data)}).then()
-}
+fetch(url).then(res=>res.json()).then(data => { 
+    newsData = data;
+    displayFilterData(newsData);
+})}
 
-var outObject;
-function array(user){
-    outObject = user.reduce(function(a, e) {
-        // GROUP BY estimated key (estKey), well, may be a just plain key
-        // a -- Accumulator result object
-        // e -- sequentally checked Element, the Element that is tested just at this itaration
-        // new grouping name may be calculated, but must be based on real value of real field
-        let estKey = (e.newsSite); 
-        (a[estKey] ? a[estKey] : (a[estKey] = null || [])).push(e);
-        return a;
-    }, []);
-    // console.log(outObject);
-    return clickFunction(outObject);
-}
+// var outObject;
+// function array(user){
+//     outObject = user.reduce(function(a, e) {
+//         // GROUP BY estimated key (estKey), well, may be a just plain key
+//         // a -- Accumulator result object
+//         // e -- sequentally checked Element, the Element that is tested just at this itaration
+//         // new grouping name may be calculated, but must be based on real value of real field
+//         let estKey = (e.newsSite); 
+//         (a[estKey] ? a[estKey] : (a[estKey] = null || [])).push(e);
+//         return a;
+//     }, {});
+//     console.log(outObject);
+//     clickFunction(outObject);
+// }
 
-function clickFunction(object){
-    Object.keys( outObject ).forEach(( value )=>{ 
-        console.log( outObject[value] ); 
-        a.forEach((an)=>{   
-            an.addEventListener('click',(event)=>{
-                if ( event.target.innerText === value ){
-                    console.log("So Far So Good")
-                    display(outObject[value])
-                }
-        })
-    });
-})
+function displayFilterData( data = newsData ){
+    if ( news.value == "All" ){
+        display(data);
+        return;
+    } 
+    const filterData = data.filter((obj)=> obj.newsSite == news.value);
+    display(filterData);
 }
 
 
-function display(user){
+// function clickFunction(outObject){
+//     Object.keys( outObject ).forEach(( value )=>{ 
+//         console.log( outObject[value] ); 
+//         a.forEach((an)=>{   
+//             an.addEventListener('click',(event)=>{
+//                 console.log("So Far So Good")
+//                 if ( event.target.innerText === value ){
+//                     // console.log("So Far So Good")
+//                     display(outObject[value])
+//                 }
+//         })
+//     });
+// })
+// }
+
+
+function display(array){
     root.innerHTML = " ";
-user.forEach((e)=>{
+array.forEach((e)=>{
     let img = document.createElement("img");
     img.classList.add("img")
     img.src = `${e.imageUrl}`
